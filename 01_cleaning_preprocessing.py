@@ -1,11 +1,3 @@
-"""
-AI Travel Analyst — Part 1: Data Cleaning & Preprocessing
-============================================================
-Cleans the raw flight_pricing_dataset.csv and produces a clean,
-analysis-ready dataframe saved to flight_pricing_clean.csv
-
-Run this in Google Colab or locally. Just update RAW_PATH below.
-"""
 
 import pandas as pd
 import numpy as np
