@@ -28,6 +28,14 @@ sns.set_style("whitegrid")
 df = pd.read_csv("flight_pricing_clean.csv")
 print(f"Loaded {df.shape[0]} rows, {df.shape[1]} columns")
 
+# Defensive: derive Departure_Hour if it's not already in the file
+# (older versions of the cleaning script didn't produce this column)
+if "Departure_Hour" not in df.columns and "Departure_Time" in df.columns:
+    df["Departure_Hour"] = pd.to_datetime(
+        df["Departure_Time"], format="mixed", errors="coerce"
+    ).dt.hour
+    print("Derived Departure_Hour from Departure_Time")
+
 # ==================================================================
 # CHART 1 — RIDGELINE: price distribution shape per airline
 # ==================================================================
@@ -174,7 +182,7 @@ def chart6_sankey(df):
 
     sources = route_stats["Source"].tolist()
     destinations = route_stats["Destination"].tolist()
-    all_nodes = list(pd.unique(sources + destinations))
+    all_nodes = list(pd.Series(sources + destinations).unique())
     node_index = {name: i for i, name in enumerate(all_nodes)}
 
     # color links by price: darker/redder = more expensive
